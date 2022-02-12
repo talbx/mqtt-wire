@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    restart: always
+    volumes:
+      - ./mosquitto/:/mosquitto/:rw
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+
+  redis:
+    image: docker.io/bitnami/redis:6.2
+    environment:
+      - REDIS_PASSWORD=manage
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+
+volumes:
+  redis_data:
+    driver: local
