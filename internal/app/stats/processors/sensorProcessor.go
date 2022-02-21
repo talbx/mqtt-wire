@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"github.com/talbx/mqtt-wire/model"
-	"github.com/talbx/mqtt-wire/utils"
+	"github.com/talbx/mqtt-wire/internal/app/stats/model"
+	"github.com/talbx/mqtt-wire/internal/pkg/utils"
 	"time"
 )
 
 type SensorProcessor struct{}
-
-var sensors = []string{prefix + "/sonoff-motion"}
 
 func (processor SensorProcessor) Process(msg MQTT.Message, val string) []byte {
 	var data model.SensorData
@@ -33,7 +31,7 @@ func (processor SensorProcessor) Process(msg MQTT.Message, val string) []byte {
 }
 
 func (processor SensorProcessor) IsProcessable(topic string) bool {
-	return utils.Contains(sensors, topic)
+	return utils.Contains(utils.WireConf.Units.Sensors, topic)
 }
 
 func (processor SensorProcessor) createNewRecord(msg MQTT.Message) model.SensorRecord {

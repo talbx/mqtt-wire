@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"github.com/talbx/mqtt-wire/model"
 	"io/ioutil"
 	"log"
 	"math"
@@ -11,12 +10,32 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type WireConfig struct {
+	Mosquitto struct {
+		Broker   string
+		ClientId string
+		Username string
+		Password string
+		Topic    string
+	}
+	Redis struct {
+		Host     string
+		Password string
+		Db       int8
+	}
+	Units struct {
+		Lights    []string
+		Radiators []string
+		Sensors   []string
+	}
+}
+
 var WireConf, _ = ReadConf()
 
 func CalculateRollingAverage(currentAverage float64, n int, newVal float64) float64 {
-	var avg = toFixed(currentAverage,2)
-	avg -= toFixed(avg / float64(n),2)
-	avg += toFixed(newVal / float64(n),2)
+	var avg = toFixed(currentAverage, 2)
+	avg -= toFixed(avg/float64(n), 2)
+	avg += toFixed(newVal/float64(n), 2)
 	return avg
 }
 
@@ -26,7 +45,7 @@ func round(num float64) int {
 
 func toFixed(num float64, precision int) float64 {
 	output := math.Pow(10, float64(precision))
-	return float64(round(num * output)) / output
+	return float64(round(num*output)) / output
 }
 
 func PrintIfErr(err error) {
@@ -35,19 +54,18 @@ func PrintIfErr(err error) {
 	}
 }
 
-func ReadConf() (*model.WireConfig, error) {
+func ReadConf() (*WireConfig, error) {
 	filename := "config.yaml"
 	buf, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	c := &model.WireConfig{}
+	c := &WireConfig{}
 	err = yaml.Unmarshal(buf, c)
 	if err != nil {
 		return nil, fmt.Errorf("in file %q: %v", filename, err)
 	}
-	fmt.Println(c)
 	return c, nil
 }
 

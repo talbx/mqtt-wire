@@ -2,9 +2,9 @@ package delegation
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"github.com/talbx/mqtt-wire/persistence"
-	"github.com/talbx/mqtt-wire/processors"
-	Utils "github.com/talbx/mqtt-wire/utils"
+	"github.com/talbx/mqtt-wire/internal/app/stats/persistence"
+	"github.com/talbx/mqtt-wire/internal/app/stats/processors"
+	Utils "github.com/talbx/mqtt-wire/internal/pkg/utils"
 )
 
 var lightProcessor = processors.LightsProcessor{}
@@ -14,6 +14,7 @@ var procs = [...]processors.Processor{lightProcessor, sensorProcessor, radiatorP
 
 func Delegate(msg MQTT.Message) []byte {
 	for _, processor := range procs {
+		Utils.LogStr(msg.Topic())
 		if processor.IsProcessable(msg.Topic()) {
 			Utils.LogStr("processable: ", msg.Topic())
 			dbRecord := persistence.GetRecord(msg.Topic())
