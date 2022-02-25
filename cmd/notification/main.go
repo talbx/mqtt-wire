@@ -3,11 +3,13 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/talbx/mqtt-wire/internal/app/notification"
+	"github.com/talbx/mqtt-wire/internal/pkg/utils"
 	"log"
 	"net/http"
 )
 
 func main() {
+	log.Println(utils.WireConf)
 	r := gin.Default()
 
 	r.POST("/", func(c *gin.Context) {
@@ -25,7 +27,7 @@ func main() {
 			return
 		}
 
-		c.JSON(http.StatusOK, "No message sent, all okay")
+		c.JSON(http.StatusOK, gin.H{"msg":"No message sent, all okay"})
 	})
 
 	r.GET("/health", func(c *gin.Context) {
