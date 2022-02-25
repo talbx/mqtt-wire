@@ -1,15 +1,14 @@
-package service
+package notification
 
 type InputData struct {
-	DataPoints []DataPoint
+	DataPoints []DeviceData
 }
 
-type DataPoint struct {
+type DeviceData struct {
 	Message Message `json:"message"`
-
+	Topic string `json:"topic"`
 }
 
 type Message struct {
 	BatteryStatus int `json:"battery"`
-	Topic string `json:"topic"`
 }

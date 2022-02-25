@@ -23,6 +23,10 @@ type WireConfig struct {
 		Password string
 		Db       int8
 	}
+	Pushover struct {
+		Apitoken  string
+		Usertoken string
+	}
 	Units struct {
 		Lights    []string
 		Radiators []string
