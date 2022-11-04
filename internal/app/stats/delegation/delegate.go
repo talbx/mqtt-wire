@@ -14,7 +14,6 @@ var procs = [...]processors.Processor{lightProcessor, sensorProcessor, radiatorP
 
 func Delegate(msg MQTT.Message) []byte {
 	for _, processor := range procs {
-		Utils.LogStr(msg.Topic())
 		if processor.IsProcessable(msg.Topic()) {
 			Utils.LogStr("processable: ", msg.Topic())
 			dbRecord := persistence.GetRecord(msg.Topic())

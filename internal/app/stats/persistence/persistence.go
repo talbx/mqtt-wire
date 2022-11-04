@@ -2,8 +2,9 @@ package persistence
 
 import (
 	"context"
-	Utils "github.com/talbx/mqtt-wire/internal/pkg/utils"
 	"log"
+
+	Utils "github.com/talbx/mqtt-wire/internal/pkg/utils"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -22,6 +23,7 @@ func GetRecord(topic string) string {
 
 func PersistRecord(data []byte, topic string) {
 	err := RedisClient.Set(ctx, topic, data, 0).Err()
+	log.Println("persisting")
 	if err != nil {
 		log.Fatal(err)
 	}
